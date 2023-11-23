@@ -7,10 +7,12 @@ export const userSchema = new Schema<TUser>({
     required: [true, "Must need an user ID"],
     trim: true,
     unique: true,
+    index: { unique: true },
   },
   username: {
     type: String,
     unique: true,
+    index: { unique: true },
     required: [true, "Must need an username"],
     trim: true,
     minlength: [3, "User Name should contain minimum 3 character."],
