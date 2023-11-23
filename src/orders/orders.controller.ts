@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Request, Response } from "express";
-import { userServices } from "./users.services";
-import { usersZSchema } from "./users.zod.validation";
+import { userServices } from "./orders.services";
+import { orderZodSchema } from "./orders.zod.validation";
 
 /* creat user controller */
-const createUser = async (req: Request, res: Response) => {
+const createOrder = async (req: Request, res: Response) => {
   const body = req.body;
+  const userId = req.baseUrl.split("/")[3];
+
   try {
     /* checking zod validation */
-    const zod = usersZSchema.safeParse(body);
+    const zod = orderZodSchema.safeParse(body);
 
     if (!zod.success) {
       return res.status(400).json({
@@ -19,22 +21,19 @@ const createUser = async (req: Request, res: Response) => {
     }
 
     /* creating user */
-    const result = await userServices.createUser(body);
-
-    /* filtering password and -id  */
-    const { password, _id, ...filteredData } = result.toObject();
+    const result = await userServices.createOrder(body, parseInt(userId));
 
     return res.status(200).json({
       success: true,
-      message: "User created successfully!",
-      data: filteredData,
+      message: "Order created successfully!",
+      data: result,
     });
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return res.status(400).json({
       success: false,
-      message: "Failed to create user.",
+      message: "Failed to create orders.",
       error: error.message,
     });
   }
@@ -85,7 +84,7 @@ const updateUserById = async (req: Request, res: Response) => {
     const id = req.params.userId;
     const data = req.body;
 
-    const zod = usersZSchema.safeParse(data);
+    const zod = orderZodSchema.safeParse(data);
     console.log(zod);
     if (!zod.success) {
       return res.status(400).json({
@@ -145,7 +144,7 @@ const deleteAllUser = async (req: Request, res: Response) => {
 
 export const userController = {
   getAllUser,
-  createUser,
+  createOrder,
   findUserById,
   deleteUserById,
   updateUserById,

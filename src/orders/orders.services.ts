@@ -1,25 +1,40 @@
-import { TUser } from "./users.interface";
-import { User } from "./users.model";
+import { User } from "../users/users.model";
+import { TOrders } from "./orders.interface";
 
 /* 1. Create a new user service */
-const createUser = async (data: TUser) => {
+const createOrder = async (data: TOrders, id: number) => {
   try {
-    /* checking if user id or username already existed or not */
-    const isExisted = await User.findOne({
-      $or: [{ userId: data.userId }, { username: data.username }],
-    });
-
-    if (isExisted) {
-      throw new Error("User id or username already existed.");
-    }
-
-    const result = await User.create(data);
+    const result = await User.aggregate([
+      {
+        $match: { userId: id },
+      },
+      {
+        $addFields: {
+          orders: {
+            $ifNull: ["$orders", { $literal: [] }],
+          },
+        },
+      },
+      {
+        $addFields: {
+          orders: {
+            $concatArrays: ["$orders", [{ ...data }]],
+          },
+        },
+      },
+      {
+        $merge: {
+          into: "users",
+          whenMatched: "merge",
+          whenNotMatched: "insert",
+        },
+      },
+    ]);
+    console.log(result);
 
     return result;
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error) {
+    return error;
   }
 };
 
@@ -66,7 +81,7 @@ const findUserById = async (id: string) => {
 };
 
 /* 4. Update user information service*/
-const updateUserById = async (id: string, data: TUser) => {
+const updateUserById = async (id: string, data: TOrders) => {
   try {
     const result = await User.findOneAndUpdate({ userId: parseInt(id) }, data, {
       new: true,
@@ -105,7 +120,7 @@ const deleteAllUser = async () => {
 
 export const userServices = {
   getAllUser,
-  createUser,
+  createOrder,
   findUserById,
   deleteUserById,
   updateUserById,
