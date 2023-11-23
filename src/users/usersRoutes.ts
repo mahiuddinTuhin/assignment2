@@ -3,12 +3,22 @@ import { userController } from "./user.controller";
 
 const users = express.Router();
 
-users.get("/", userController.getAllUser);
-users.get("/:uid", userController.findUserById);
-users.delete("/:uid", userController.deleteUserById);
+/* 1. Create a new user */
 users.post("/", userController.createUser);
+
+/* 2. Retrieve a list of all users */
+users.get("/", userController.getAllUser);
+
+/* 3. Retrieve a specific user by ID */
+users.get("/:uid", userController.findUserById);
+
+/* 4. Update user information */
 users.put("/:uid", userController.updateUserById);
 
+/* 5. Delete a user */
+users.delete("/:uid", userController.deleteUserById);
+
+/* delete all users */
 users.delete("/all-users", userController.deleteAllUser);
 
 export const userRouter = users;

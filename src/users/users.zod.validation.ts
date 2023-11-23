@@ -10,11 +10,11 @@ export const usersZSchema = z
         firstName: z
           .string()
           .trim()
-          .min(5, { message: "Must be 5 or more characters long" }),
+          .min(3, { message: "FirstName must be 3 or more characters long" }),
         lastName: z
           .string()
           .trim()
-          .max(5, { message: "Must be 5 or fewer characters long" }),
+          .min(3, { message: "LastName must be 3 or more characters long" }),
       })
       .required(),
     age: z.number().positive(),
