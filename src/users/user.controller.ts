@@ -12,13 +12,17 @@ const getAllUser = async (req: Request, res: Response) => {
 };
 
 const createUser = async (req: Request, res: Response) => {
+  const body = req.body;
   try {
-    const body = req.body;
-
     const result = await userServices.createUser(body);
-    res.status(400).json(result);
+
+    res.status(200).json({
+      success: true,
+      message: "Successfully created the student data.",
+      data: result,
+    });
   } catch (error) {
-    res.status(200).json(error);
+    res.status(500).json(error);
   }
 };
 
@@ -59,12 +63,12 @@ const updateUserById = async (req: Request, res: Response) => {
 };
 
 const deleteAllUser = async (req: Request, res: Response) => {
-  console.log("hittt");
   try {
+    console.log("hittt");
     const result = await userServices.deleteAllUser();
-    res.status(400).json(result);
-  } catch (error) {
-    res.status(200).json(error);
+    res.status(500).json({ result });
+  } catch (error: unknown) {
+    res.status(500).json({ message: error });
   }
 };
 

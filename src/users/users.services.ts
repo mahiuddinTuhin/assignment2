@@ -7,13 +7,12 @@ const getAllUser = async () => {
 };
 
 const createUser = async (data: TUser) => {
-  const isExisted = await User.findOne({ userId: data.userId });
-  if (isExisted) {
-    return "user id already existed";
-  }
-  const user = new User(data);
-
-  const result = await user.save();
+  // const isExisted = await User.findOne({ userId: data.userId });
+  // if (isExisted) {
+  //   return "user id already existed";
+  // }
+  // console.log({ data });
+  const result = await User.create(data);
   return result;
 };
 

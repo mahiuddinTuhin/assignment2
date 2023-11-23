@@ -8,6 +8,7 @@ users.get("/:uid", userController.findUserById);
 users.delete("/:uid", userController.deleteUserById);
 users.post("/", userController.createUser);
 users.put("/:uid", userController.updateUserById);
-users.delete("/all", userController.deleteAllUser);
+
+users.delete("/all-users", userController.deleteAllUser);
 
 export const userRouter = users;
