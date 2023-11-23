@@ -1,9 +1,38 @@
 import { User } from "../users/users.model";
 import { TOrders } from "./orders.interface";
 
+interface CustomError {
+  success: boolean;
+  status: number;
+  message: string;
+}
+class NotFoundError extends Error {
+  errors: CustomError;
+
+  constructor(errors: CustomError) {
+    super();
+    this.errors = errors;
+  }
+}
+const isExisted = async (id: number) => {
+  return await User.findOne({ userId: id });
+};
+
 /* 1. Create a new user service */
 const createOrder = async (data: TOrders, id: number) => {
+  const user = await isExisted(id);
+
+  if (!user) {
+    const errors = {
+      success: false,
+      status: 404,
+      message: "User not found!",
+    };
+
+    throw new NotFoundError(errors);
+  }
   try {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const result = await User.aggregate([
       {
         $match: { userId: id },
@@ -30,21 +59,50 @@ const createOrder = async (data: TOrders, id: number) => {
         },
       },
     ]);
-    console.log(result);
 
     return result;
-  } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     return error;
   }
 };
 
 /* 2. Retrieve a list of all users service */
-const getAllUser = async () => {
+const getAllOrdersById = async (id: string) => {
+  const user = await isExisted(parseInt(id));
+
+  if (!user) {
+    const errors = {
+      success: false,
+      status: 404,
+      message: "User not found!",
+    };
+    throw new NotFoundError(errors);
+  }
+
   try {
     const result = await User.aggregate([
       {
+        $match: { userId: parseInt(id) },
+      },
+      // {
+      //   $project: {
+      //     orders: 1,
+      //     _id: 0,
+      //   },
+      // },
+      // {
+      //   $unwind: "$orders",
+      // },
+
+      // {
+      //   $group: {
+      //     _id: "$orders",
+      //   },
+      // },
+      {
         $project: {
-          password: 0,
+          orders: 1,
           _id: 0,
         },
       },
@@ -52,77 +110,54 @@ const getAllUser = async () => {
     return result;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    throw new Error(error);
+    return error;
   }
 };
 
-/* 3. Retrieve a specific user by ID service */
-const findUserById = async (id: string) => {
+/* 3. Calculate Total Price of Orders for a Specific User */
+const getTotalPriceById = async (id: string) => {
+  const user = await isExisted(parseInt(id));
+
+  if (!user) {
+    const errors = {
+      success: false,
+      status: 404,
+      message: "User not found!",
+    };
+    throw new NotFoundError(errors);
+  }
+
   try {
     const result = await User.aggregate([
-      { $match: { userId: parseInt(id) } },
+      {
+        $match: { userId: parseInt(id) },
+      },
+      {
+        $unwind: "$orders",
+      },
+      {
+        $group: {
+          _id: "$_id",
+          totalPrice: { $sum: "$orders.price" },
+        },
+      },
       {
         $project: {
-          password: 0,
           _id: 0,
+          totalPrice: {
+            $round: ["$totalPrice", 2],
+          },
         },
       },
     ]);
-
-    if (result.length > 0) {
-      return result[0];
-    } else {
-      throw new Error("Failed to get data!");
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    throw new Error(error);
-  }
-};
-
-/* 4. Update user information service*/
-const updateUserById = async (id: string, data: TOrders) => {
-  try {
-    const result = await User.findOneAndUpdate({ userId: parseInt(id) }, data, {
-      new: true,
-    });
-
-    console.log(result);
-    if (!result) {
-      throw new Error("User not found!");
-    }
     return result;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    throw new Error(error);
+    return error;
   }
 };
-
-/* 5. Delete a user service */
-const deleteUserById = async (id: string) => {
-  try {
-    const result = await User.findOneAndDelete({ userId: id });
-
-    if (!result) {
-      throw new Error("User not found");
-    }
-    return result;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    throw new Error(error);
-  }
-};
-
-const deleteAllUser = async () => {
-  const result = await User.deleteMany({});
-  return result;
-};
-
-export const userServices = {
-  getAllUser,
+export const ordersServices = {
+  getAllOrdersById,
   createOrder,
-  findUserById,
-  deleteUserById,
-  updateUserById,
-  deleteAllUser,
+  getTotalPriceById,
 };
