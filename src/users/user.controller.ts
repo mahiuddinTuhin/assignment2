@@ -6,9 +6,10 @@ import { User } from "./users.model";
 
 /* creat user controller */
 const createUser = async (req: Request, res: Response) => {
+  console.log("create user hit");
   const body = req.body;
   try {
-    const existed = await User.isExisted(Number(body.id));
+    const existed = await User.isExisted(Number(body.userId));
     if (existed) {
       return res.status(400).json({
         success: false,
@@ -132,6 +133,7 @@ const updateUserById = async (req: Request, res: Response) => {
       });
     }
 
+    /* updating existing field */
     const result = await userServices.updateUserById(id, data);
 
     return res.status(200).json({

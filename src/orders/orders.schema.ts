@@ -6,19 +6,19 @@ export const ordersSchema = new Schema<TOrders>(
   {
     price: {
       type: Number,
-      required: [true, "Must need a price"],
+      // required: [true, "Must need a price"],
       unique: true,
     },
     productName: {
       type: String,
-      required: [true, "Must need an product Name"],
+      // required: [true, "Must need an product Name"],
       trim: true,
       minlength: [3, "User Name should contain minimum 3 character."],
       maxlength: [20, "User Name should not have more then 20 character."],
     },
     quantity: {
       type: Number,
-      required: [true, "Must need quantity."],
+      // required: [true, "Must need quantity."],
     },
     category: {
       type: String,

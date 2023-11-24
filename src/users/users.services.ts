@@ -1,5 +1,6 @@
 import { TUser } from "./users.interface";
 import { User } from "./users.model";
+import bcrypt from "bcrypt";
 
 /* 1. Create a new user service */
 const createUser = async (data: TUser) => {
@@ -13,6 +14,12 @@ const createUser = async (data: TUser) => {
       throw new Error("User id or username already existed.");
     }
 
+    /* encrypting the password with bcrypt */
+    const hashedPass = await bcrypt.hash(data.password, 10);
+
+    data.password = hashedPass;
+
+    /* finally creating user */
     const result = await User.create(data);
 
     return result;
@@ -74,9 +81,16 @@ const findUserById = async (id: string) => {
 /* 4. Update user information service*/
 const updateUserById = async (id: string, data: TUser) => {
   try {
+    /* encrypting the password with bcrypt */
+    const hashedPass = await bcrypt.hash(data.password, 10);
+
+    data.password = hashedPass;
+
     const result = await User.findOneAndUpdate({ userId: parseInt(id) }, data, {
       new: true,
-    });
+    })
+      .select("-orders -password -_id")
+      .sort({ createdAt: -1 });
 
     console.log(result);
     if (!result) {

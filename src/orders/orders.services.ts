@@ -43,33 +43,36 @@ const createOrder = async (data: TOrders, id: number) => {
 };
 
 /* 2. Retrieve a list of all users service */
-const getAllOrdersById = async (id: string) => {
+const getAllOrdersById = async (id: number) => {
   // const user = await User.isUserExisted(parseInt(id));
 
   try {
     const result = await User.aggregate([
       {
-        $match: { userId: parseInt(id) },
+        $match: { userId: id },
       },
-      // {
-      //   $project: {
-      //     orders: 1,
-      //     _id: 0,
-      //   },
-      // },
-      // {
-      //   $unwind: "$orders",
-      // },
-
-      // {
-      //   $group: {
-      //     _id: "$orders",
-      //   },
-      // },
       {
         $project: {
-          orders: 1,
+          // userId: 0,
+          // userName:0
+          orders: {
+            $map: {
+              input: "$orders",
+              as: "order",
+              in: {
+                productName: "$$order.productName",
+                price: "$$order.price",
+                quantity: "$$order.quantity",
+              },
+            },
+          },
           _id: 0,
+          // "orders.description": 0,
+        },
+      },
+      {
+        $match: {
+          "orders.productName": { $exists: true },
         },
       },
     ]);

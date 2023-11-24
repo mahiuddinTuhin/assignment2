@@ -34,6 +34,14 @@ const createOrder = async (req: Request, res: Response) => {
       });
     }
 
+    /* checking empty object */
+    if (Object.values(body).length === 0 || !body) {
+      return res.status(400).json({
+        success: false,
+        message: "Empty object",
+      });
+    }
+
     /* creating user */
     const result = await ordersServices.createOrder(body, parseInt(userId));
 
@@ -69,7 +77,8 @@ const getAllOrdersById = async (req: Request, res: Response) => {
     }
 
     /* finding orders by id */
-    const result = await ordersServices.getAllOrdersById(userId);
+
+    const result = await ordersServices.getAllOrdersById(Number(userId));
     return res.status(200).json({
       success: true,
       message: "Order fetched successfully!",
