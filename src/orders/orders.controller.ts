@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import { ordersServices } from "./orders.services";
 import { orderZodSchema } from "./orders.zod.validation";
+import { User } from "../users/users.model";
 
 /* creat user controller */
 const createOrder = async (req: Request, res: Response) => {
@@ -9,6 +10,19 @@ const createOrder = async (req: Request, res: Response) => {
   const userId = req.baseUrl.split("/")[3];
 
   try {
+    /* checking user available or not */
+    const existed = await User.isExisted(Number(userId));
+    if (!existed) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    }
+
     /* checking zod validation */
     const zod = orderZodSchema.safeParse(body);
 
@@ -31,13 +45,8 @@ const createOrder = async (req: Request, res: Response) => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    const status = error.errors.status;
-    const message = error.errors.message;
-    return res.status(status).json({
-      success: false,
-      status,
-      message,
-    });
+    console.log(error);
+    res.send(error);
   }
 };
 
@@ -45,6 +54,21 @@ const createOrder = async (req: Request, res: Response) => {
 const getAllOrdersById = async (req: Request, res: Response) => {
   try {
     const userId = req.baseUrl.split("/")[3];
+
+    /* checking user available or not */
+    const existed = await User.isExisted(Number(userId));
+    if (!existed) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    }
+
+    /* finding orders by id */
     const result = await ordersServices.getAllOrdersById(userId);
     return res.status(200).json({
       success: true,
@@ -67,6 +91,21 @@ const getAllOrdersById = async (req: Request, res: Response) => {
 const getTotalPriceById = async (req: Request, res: Response) => {
   try {
     const userId = req.baseUrl.split("/")[3];
+
+    /* checking user available or not */
+    const existed = await User.isExisted(Number(userId));
+    if (!existed) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    }
+
+    /* finding total price by id */
     const result = await ordersServices.getTotalPriceById(userId);
     return res.status(200).json({
       success: true,

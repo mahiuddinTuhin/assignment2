@@ -30,6 +30,11 @@ const getAllUser = async () => {
       {
         $project: {
           password: 0,
+          isActive: 0,
+          hobbies: 0,
+          orders: 0,
+          userId: 0,
+
           _id: 0,
         },
       },
@@ -50,6 +55,7 @@ const findUserById = async (id: string) => {
         $project: {
           password: 0,
           _id: 0,
+          orders: 0,
         },
       },
     ]);

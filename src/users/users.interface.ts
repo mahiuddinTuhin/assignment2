@@ -1,3 +1,5 @@
+import { Model } from "mongoose";
+
 export type TUser = {
   userId: number;
   username: string;
@@ -16,3 +18,8 @@ export type TUser = {
     country: string;
   };
 };
+
+/* making static method */
+export interface IUserStaticModel extends Model<TUser> {
+  isExisted(id: number): Promise<TUser | null>;
+}

@@ -2,11 +2,23 @@
 import { Request, Response } from "express";
 import { userServices } from "./users.services";
 import { usersZSchema } from "./users.zod.validation";
+import { User } from "./users.model";
 
 /* creat user controller */
 const createUser = async (req: Request, res: Response) => {
   const body = req.body;
   try {
+    const existed = await User.isExisted(Number(body.id));
+    if (existed) {
+      return res.status(400).json({
+        success: false,
+        message: "User already existed.",
+        error: {
+          code: 403,
+          description: "User already existed.",
+        },
+      });
+    }
     /* checking zod validation */
     const zod = usersZSchema.safeParse(body);
 
@@ -63,6 +75,19 @@ const getAllUser = async (req: Request, res: Response) => {
 const findUserById = async (req: Request, res: Response) => {
   try {
     const id = req.params.userId;
+
+    const existed = await User.isExisted(Number(id));
+    if (!existed) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    }
+
     const result = await userServices.findUserById(id);
     return res.status(200).json({
       success: true,
@@ -84,6 +109,18 @@ const updateUserById = async (req: Request, res: Response) => {
   try {
     const id = req.params.userId;
     const data = req.body;
+
+    const existed = await User.isExisted(Number(id));
+    if (!existed) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    }
 
     const zod = usersZSchema.safeParse(data);
     console.log(zod);
@@ -116,6 +153,18 @@ const updateUserById = async (req: Request, res: Response) => {
 const deleteUserById = async (req: Request, res: Response) => {
   try {
     const id = req.params.userId;
+
+    const existed = await User.isExisted(Number(id));
+    if (!existed) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found!",
+        },
+      });
+    }
     const result = await userServices.deleteUserById(id);
     return res.status(200).json({
       success: true,

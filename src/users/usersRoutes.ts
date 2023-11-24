@@ -3,14 +3,14 @@ import { userController } from "./user.controller";
 
 const users = express.Router();
 
+/* 3. Retrieve a specific user by ID */
+users.get("/:userId", userController.findUserById);
+
 /* 1. Create a new user */
 users.post("/", userController.createUser);
 
 /* 2. Retrieve a list of all users */
 users.get("/", userController.getAllUser);
-
-/* 3. Retrieve a specific user by ID */
-users.get("/:userId", userController.findUserById);
 
 /* 4. Update user information */
 users.put("/:userId", userController.updateUserById);

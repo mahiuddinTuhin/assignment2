@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import { userRouter } from "./users/usersRoutes";
 import { ordersRoutes } from "./orders/ordersRoutes";
@@ -10,5 +10,12 @@ app.use(cors());
 app.use("/api/users", userRouter);
 
 app.use("/api/users/:userId/orders/", ordersRoutes);
+
+app.all("/*", (req: Request, res: Response) => {
+  res.status(500).json({
+    success: false,
+    message: "Incorrect route!",
+  });
+});
 
 export default app;

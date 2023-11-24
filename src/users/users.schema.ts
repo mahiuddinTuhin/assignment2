@@ -1,7 +1,9 @@
 import { Schema } from "mongoose";
-import { TUser } from "./users.interface";
+import { IUserStaticModel, TUser } from "./users.interface";
+import { User } from "./users.model";
+// import { User } from "./users.model";
 
-export const userSchema = new Schema<TUser>(
+export const userSchema = new Schema<TUser, IUserStaticModel>(
   {
     userId: {
       type: Number,
@@ -135,3 +137,10 @@ export const userSchema = new Schema<TUser>(
   },
   { versionKey: false }
 );
+
+/* making static method */
+
+userSchema.statics.isExisted = async function (id: number) {
+  const existed = await User.findOne({ userId: id });
+  return existed ? true : false;
+};
