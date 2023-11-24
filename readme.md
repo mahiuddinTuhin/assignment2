@@ -35,8 +35,11 @@ A Node.js Express application built with TypeScript, integrating MongoDB using M
     // User data
   }
 }
+```
 
-Error Response (404 Not Found)
+## Error Response (404 Not Found)
+
+```
 {
   "success": false,
   "message": "User not found",
