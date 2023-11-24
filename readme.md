@@ -9,6 +9,7 @@ A Node.js Express application built with TypeScript, integrating MongoDB using M
 - Clone the repository: `git clone <repository_url>`
 - Install dependencies: `npm install`
 - Set up MongoDB and configure the connection string in `.env`
+- run development mood: `npm run dev`
 
 ## API Endpoints
 
