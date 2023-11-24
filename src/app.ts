@@ -7,6 +7,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.use("/", (req: Request, res: Response) => {
+  res.status(200).json({
+    message: "Server is running on port 5050.",
+  });
+});
+
 app.use("/api/users", userRouter);
 
 app.use("/api/users/:userId/orders/", ordersRoutes);
