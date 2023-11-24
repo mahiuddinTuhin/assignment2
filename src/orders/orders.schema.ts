@@ -40,5 +40,5 @@ export const ordersSchema = new Schema<TOrders>(
       default: false,
     },
   },
-  { versionKey: false }
+  { versionKey: false },
 );

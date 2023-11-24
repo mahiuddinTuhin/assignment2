@@ -135,7 +135,7 @@ export const userSchema = new Schema<TUser, IUserStaticModel>(
       },
     },
   },
-  { versionKey: false }
+  { versionKey: false },
 );
 
 /* making static method */
