@@ -37,7 +37,7 @@ A Node.js Express application built with TypeScript, integrating MongoDB using M
 }
 ```
 
-## Error Response (404 Not Found)
+### Error Response (404 Not Found)
 
 ```
 {
@@ -51,7 +51,7 @@ A Node.js Express application built with TypeScript, integrating MongoDB using M
 
 ```
 
-## User data format
+### User data format
 
 ```
 {
@@ -81,7 +81,7 @@ A Node.js Express application built with TypeScript, integrating MongoDB using M
 
 ```
 
-## Product Data Format
+### Product Data Format
 
 ```
 {
@@ -92,22 +92,22 @@ A Node.js Express application built with TypeScript, integrating MongoDB using M
 
 ```
 
-## Validation and Error Handling
+### Validation and Error Handling
 
 - Implemented validation using Joi/Zod for user and order creation and updating operations.
 - Handles validation errors gracefully and provides meaningful error messages in the API responses.
 
-## Running the Application
+### Running the Application
 
 - Run in development mode: npm run dev
 - Build for production: npm run build and start the server: npm start
 
-## Submission Details
+### Submission Details
 
 - GitHub Repository: Repository Link
 - Live Deployment: Live Link
 
-## Coding Standards
+### Coding Standards
 
 -Followed clean, modular, and well-organized coding practices.
 
@@ -115,6 +115,6 @@ A Node.js Express application built with TypeScript, integrating MongoDB using M
 - Adhered to specified API endpoint structure and naming conventions.
 - Handled validation errors and implemented error handling for scenarios like user not found.
 
-## Credits
+### Credits
 
 This project was completed by MD Mahiuddin Tuhin for Apollo Level 2 Web Dev (Batch 2).
