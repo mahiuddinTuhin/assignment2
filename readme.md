@@ -48,6 +48,47 @@ Error Response (404 Not Found)
 
 ```
 
+## User data format
+
+```
+{
+    "success": true,
+    "message": "User fetched successfully!",
+    "data": {
+        "userId": "number",
+        "username": "string",
+        "fullName": {
+            "firstName": "string",
+            "lastName": "string"
+        },
+        "age": "number",
+        "email": "string",
+        "isActive": "boolean",
+        "hobbies": [
+            "string",
+            "string"
+        ],
+        "address": {
+            "street": "string",
+            "city": "string",
+            "country": "string"
+        }
+    }
+}
+
+```
+
+## Product Data Format
+
+```
+{
+    "productName": "string",
+    "price": "number",
+    "quantity": "number"
+}
+
+```
+
 ## Validation and Error Handling
 
 - Implemented validation using Joi/Zod for user and order creation and updating operations.
