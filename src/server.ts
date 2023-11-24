@@ -6,13 +6,11 @@ require("dotenv").config();
 
 const port = process.env.PORT || 5050;
 const db_url = process.env.DB_URL || "";
-const db_name = process.env.DB_NAME || "assignment2";
 // main().catch((err) => console.log(err));
 
 async function main() {
   try {
-    const connection = await mongoose.connect(`${db_url}/
-    ${db_name}`);
+    const connection = await mongoose.connect(`${db_url}`);
     if (connection) {
       app.listen(port, () => {
         console.log("databse connected.");

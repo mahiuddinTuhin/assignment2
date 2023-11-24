@@ -156,6 +156,13 @@ const deleteUserById = async (req, res) => {
             });
         }
         const result = await users_services_1.userServices.deleteUserById(id);
+        if (!result) {
+            return res.status(400).json({
+                success: false,
+                message: "Internal Server error",
+                error: "Failed to delete the user!"
+            });
+        }
         return res.status(200).json({
             success: true,
             message: "User deleted successfully!",

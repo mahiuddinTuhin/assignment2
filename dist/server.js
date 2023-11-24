@@ -9,12 +9,10 @@ const app_1 = __importDefault(require("./app"));
 require("dotenv").config();
 const port = process.env.PORT || 5050;
 const db_url = process.env.DB_URL || "";
-const db_name = process.env.DB_NAME || "assignment2";
 // main().catch((err) => console.log(err));
 async function main() {
     try {
-        const connection = await mongoose_1.default.connect(`${db_url}/
-    ${db_name}`);
+        const connection = await mongoose_1.default.connect(`${db_url}`);
         if (connection) {
             app_1.default.listen(port, () => {
                 console.log("databse connected.");
