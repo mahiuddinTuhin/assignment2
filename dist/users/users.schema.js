@@ -2,17 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userSchema = void 0;
 const mongoose_1 = require("mongoose");
+const users_model_1 = require("./users.model");
+// import { User } from "./users.model";
 exports.userSchema = new mongoose_1.Schema({
     userId: {
         type: Number,
         required: [true, "Must need an user ID"],
-        trim: true,
         unique: true,
-        index: { unique: true },
     },
     username: {
         type: String,
-        unique: true,
         index: { unique: true },
         required: [true, "Must need an username"],
         trim: true,
@@ -132,4 +131,9 @@ exports.userSchema = new mongoose_1.Schema({
             minlength: [3, "Country name should contain minimum 3 character."],
         },
     },
-});
+}, { versionKey: false });
+/* making static method */
+exports.userSchema.statics.isExisted = async function (id) {
+    const existed = await users_model_1.User.findOne({ userId: id });
+    return existed ? true : false;
+};

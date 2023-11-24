@@ -54,7 +54,7 @@ const createUser = async (req: Request, res: Response) => {
 };
 
 /* get all user controller */
-const getAllUser = async (req: Request, res: Response) => {
+const getAllUser = async (_req: Request, res: Response) => {
   try {
     const result = await userServices.getAllUser();
     return res.status(200).json({
@@ -168,6 +168,15 @@ const deleteUserById = async (req: Request, res: Response) => {
       });
     }
     const result = await userServices.deleteUserById(id);
+
+    if (!result) {
+       return res.status(400).json({
+      success: false,
+      message: "Internal Server error",
+      error: "Failed to delete the user!"
+    });
+    }
+
     return res.status(200).json({
       success: true,
       message: "User deleted successfully!",
@@ -184,7 +193,7 @@ const deleteUserById = async (req: Request, res: Response) => {
 };
 
 /* delete all user controller */
-const deleteAllUser = async (req: Request, res: Response) => {
+const deleteAllUser = async (_req: Request, res: Response) => {
   try {
     console.log("hittt");
     const result = await userServices.deleteAllUser();

@@ -9,14 +9,21 @@ const app_1 = __importDefault(require("./app"));
 require("dotenv").config();
 const port = process.env.PORT || 5050;
 const db_url = process.env.DB_URL || "";
-main().catch((err) => console.log(err));
+const db_name = process.env.DB_NAME || "assignment2";
+// main().catch((err) => console.log(err));
 async function main() {
-    const connected = await mongoose_1.default.connect(`${db_url}/
-  assignment2`);
-    if (connected) {
-        console.log("databse connected.");
+    try {
+        const connection = await mongoose_1.default.connect(`${db_url}/
+    ${db_name}`);
+        if (connection) {
+            app_1.default.listen(port, () => {
+                console.log("databse connected.");
+                console.log(`Server is up on port: ${port}`);
+            });
+        }
+    }
+    catch (error) {
+        console.error("Error connecting to database:", error);
     }
 }
-app_1.default.listen(port, () => {
-    console.log(`Server is up on port: ${port}`);
-});
+main();

@@ -11,14 +11,14 @@ app.use("/api/users", userRouter);
 
 app.use("/api/users/:userId/orders/", ordersRoutes);
 
-app.all("/", (req: Request, res: Response) => {
+app.all("/", (_req: Request, res: Response) => {
   res.status(200).json({
     success: true,
     message: "Server is running well.",
   });
 });
 
-app.all("/*", (req: Request, res: Response) => {
+app.all("/*", (_req: Request, res: Response) => {
   res.status(500).json({
     success: false,
     message: "Incorrect route!",
